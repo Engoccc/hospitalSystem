@@ -1,6 +1,7 @@
 package web.example.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.UnsupportedEncodingException;
@@ -12,19 +13,32 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import web.example.service.UserService;
+import web.example.users.User;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
-@RequestMapping("/register")
+
 public class registerController {
         static String phone;
         static String checkNum;
 
-        @RequestMapping("/")
+        @Autowired
+        UserService userService;
+
+        @RequestMapping(value="/index",method = RequestMethod.GET)
+        public String index() {
+        return "index";
+    }
+
+        @RequestMapping("/register")
         public String showRegister(){
             return "register";
         }
 
-//    @RequestMapping("/rstatus")
+//    @RequestMapping("/register/rstatus,method = RequestMethod.GET")
 //    public String checkPhone(){
 //
 //        HttpClient client = new HttpClient();
@@ -61,7 +75,7 @@ public class registerController {
         return val;
     }
 
-    @RequestMapping(value = "/rstatus",method = RequestMethod.GET)
+    @RequestMapping(value = "/register/rstatus",method = RequestMethod.GET)
     public String getCheckNum(@RequestParam("userPhone") String userPhone){
         String num = getRadom(6);
         phone = userPhone;
@@ -70,7 +84,7 @@ public class registerController {
         return "PhoneCheck";
     }
 
-    @RequestMapping(value = "/rstatus",method = RequestMethod.POST)
+    @RequestMapping(value = "/register/rstatus",method = RequestMethod.POST)
     public String checkNum(String num){
 
      System.out.println("您输入的验证码是："+num);
@@ -84,4 +98,32 @@ public class registerController {
      }
     }
 
+    @RequestMapping(value = "/register/rstatus/submitUser",method = RequestMethod.POST)
+    public String submitUser(User user){
+            System.out.println(phone+" pwd: "+user.getPassword()+" name: "+user.getName()+" sex: "+user.getSex()+" uid:"+user.getUid()+" card: "+user.getCard());
+            userService.insertIn(phone,user.getPassword(),user.getName(),user.getSex(),user.getUid(),user.getCard());
+            return "success";
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String logIn(){
+            return "login";
+    }
+    @RequestMapping(value = "/checkInfo",method = RequestMethod.POST)
+    public String checkInfo(HttpServletRequest request, User user){
+
+        System.out.println("phone: " + user.getPhone() + ";Password: " + user.getPassword());
+        if(userService.login(user.getPhone(),user.getPassword())){
+            request.getSession().setAttribute("user",user);
+            return "redirect:/userInfo";
+        }
+        else {
+            return "login";
+        }
+    }
+
+    @RequestMapping(value = "/userInfo",method = RequestMethod.GET)
+    public String showUser(){
+            return "userInfo";
+    }
 }

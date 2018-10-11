@@ -16,11 +16,11 @@
     <div align="center">
         <p>填写基本信息</p>
         <form name="input" action="/hospitalSystem/register/rstatus/submitUser" method="POST">
-            姓名：<input type="text" name="userName">
-            性别：<input type="text" name="userSex">
-            身份证号：<input type="text" name="userPid">
-            医保卡号：<input type="text" name="userCard">
-            设置密码：<input type="text" name="userPassword">
+            姓名：<input type="text" name="name">
+            性别：<input type="text" name="sex">
+            设置密码：<input type="text" name="password">
+            身份证号：<input type="text" name="uid">
+            医保卡号：<input type="text" name="card">
             <input type="submit" value="提交">
         </form>
     </div>

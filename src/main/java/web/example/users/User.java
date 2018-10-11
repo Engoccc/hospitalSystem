@@ -22,6 +22,7 @@ public class User {
 
 
     public User(){}
+
     public User(String phone,String name,String sex,String uid,String card,String password){
         this.phone=phone;
         this.name=name;
@@ -30,22 +31,38 @@ public class User {
         this.card=card;
         this.password = password;
     }
+
     public String getPhone() {
         return phone;
     }
-    public void setPhone(long id) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getName() {
         return name;
     }
-    public String getPassword(){return password;}
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getPassword(){return password;}
+    public void setPassword(String pwd){this.password = pwd;}
+
+
     public String getSex() {
         return sex;
     }
     public void setSex(String sex) { this.sex = sex; }
+
+    public String  getUid() {
+        return uid;
+    }
+    public void setUid(String uid){this.uid = uid;}
+
+    public String getCard() {
+        return card;
+    }
+    public void setCard(String card){this.card = card;}
 
 }

@@ -8,10 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.io.IOException;
@@ -57,7 +54,7 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
     public BasicDataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/huser?useUnicode=true&characterEncoding=UTF-8?serverTimezone=GMT");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/huser?useUnicode=true&characterEncoding=UTF-8");//?serverTimezone=GMT
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
         return dataSource;
@@ -93,4 +90,16 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
     }
 
 
+    /**
+     * 添加拦截登录拦截器
+     */
+    @Bean
+    public LoginInterceptors loginInterceptors() {
+        return new LoginInterceptors();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginInterceptors());
+    }
 }
