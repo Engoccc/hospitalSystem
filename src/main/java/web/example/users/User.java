@@ -16,6 +16,7 @@ public class User {
     @NotNull
     @Digits(integer = 18,fraction = 0)
     private String uid;//身份证号
+
     @NotNull
     @Digits(integer = 9,fraction = 0)
     private String card;

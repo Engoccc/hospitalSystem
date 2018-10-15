@@ -3,6 +3,7 @@ package web.config;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +12,16 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("web.example")//组件扫描包
+@ComponentScan(basePackages = {"web.example","web.config"})//组件扫描包
 public class DispatcherServletXml extends WebMvcConfigurerAdapter {
 
+    //@Autowired
+    //DBConfig dbConfig;
     @Bean
     public ViewResolver viewResolver(){//配置jsp视图解析器
         InternalResourceViewResolver resolver=new InternalResourceViewResolver();
@@ -54,7 +58,7 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
     public BasicDataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/huser?useUnicode=true&characterEncoding=UTF-8");//?serverTimezone=GMT
+        dataSource.setUrl("jdbc:mysql://localhost:3306/huser?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
         return dataSource;

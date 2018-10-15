@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://www.springframework.org/tags" %>
+<%@ page isELIgnored="false" %>
 <%--
   Created by IntelliJ IDEA.
   User: Piong
@@ -16,11 +17,12 @@
     <div align="center">
         <p>填写基本信息</p>
         <form name="input" action="/hospitalSystem/register/rstatus/submitUser" method="POST">
+            手机号：<input type="text" name="phone" value=${phone} readonly >
             姓名：<input type="text" name="name">
             性别：<input type="text" name="sex">
             设置密码：<input type="text" name="password">
-            身份证号：<input type="text" name="uid">
-            医保卡号：<input type="text" name="card">
+            身份证号(18位)：<input type="text" name="uid">
+            医保卡号(9位)：<input type="text" name="card">
             <input type="submit" value="提交">
         </form>
     </div>

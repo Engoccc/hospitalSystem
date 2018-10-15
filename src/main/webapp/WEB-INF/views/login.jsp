@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/test.css"/> "/>
 </head>
 <body>
+<%  if(request.getSession().getAttribute("user") == null) { %>
 <div align="center">
     <p>用户登录</p>
     <form name="input" action="/hospitalSystem/checkInfo" method="POST">
@@ -21,5 +22,10 @@
         <input type="submit" value="提交">
     </form>
 </div>
+<%} else{ %>
+<h1>您已经登录了！</h1>
+<p> <a href="/hospitalSystem/logout" >退出登录</a></p>
+<%} %>
+
 </body>
 </html>
