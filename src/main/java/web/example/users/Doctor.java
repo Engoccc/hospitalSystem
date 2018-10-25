@@ -2,13 +2,11 @@ package web.example.users;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class User {
-
+public class Doctor {
     //@NotEmpty  ：既不能为null也不能为""，注意与@NotNull区别
+
     @NotEmpty
     @Size(min = 11,max = 11)
     private String phone;
@@ -19,28 +17,29 @@ public class User {
     @NotEmpty
     private String sex;
 
-    @NotEmpty
-    private String password;
 
     //字符串用 @Size 数字用@Digits
     @NotEmpty
     @Size(min = 18,max = 18)
-    private String uid;//身份证号
+    private String did;//身份证号
 
     @NotEmpty
-    @Size(min = 9,max = 9)
-    private String card;
+    private String ranks;
 
 
-    public User(){}
+    @NotEmpty
+    private String office;
 
-    public User(String phone,String name,String sex,String uid,String card,String password){
+
+    public Doctor(){}
+
+    public Doctor(String phone,String name,String sex,String did,String ranks,String office){
         this.phone=phone;
         this.name=name;
         this.sex=sex;
-        this.uid=uid;
-        this.card=card;
-        this.password = password;
+        this.did=did;
+        this.ranks=ranks;
+        this.office = office;
     }
 
     public String getPhone() {
@@ -57,8 +56,8 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword(){return password;}
-    public void setPassword(String pwd){this.password = pwd;}
+    public String getOffice(){return office;}
+    public void setOffice(String office){this.office = office;}
 
 
     public String getSex() {
@@ -66,14 +65,14 @@ public class User {
     }
     public void setSex(String sex) { this.sex = sex; }
 
-    public String  getUid() {
-        return uid;
+    public String  getDid() {
+        return did;
     }
-    public void setUid(String uid){this.uid = uid;}
+    public void setDid(String did){this.did = did;}
 
-    public String getCard() {
-        return card;
+    public String getRanks() {
+        return ranks;
     }
-    public void setCard(String card){this.card = card;}
+    public void setRanks(String ranks){this.ranks = ranks;}
 
 }

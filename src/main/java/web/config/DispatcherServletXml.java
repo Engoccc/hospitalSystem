@@ -46,7 +46,7 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/statics/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/statics/js/");
-        registry.addResourceHandler("/image/**").addResourceLocations("WEB-INF/statics/image/");
+        registry.addResourceHandler("/image/**").addResourceLocations("/WEB-INF/statics/image/");//Location真实路径，handler是显示的映射路径
         super.addResourceHandlers(registry);
     }
 

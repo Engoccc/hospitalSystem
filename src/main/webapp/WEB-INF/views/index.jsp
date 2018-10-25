@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Index</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/test.css"/> "/>
+    <link rel="stylesheet" type="text/css" href="css/test.css "/><%--<c:url value="/css/test.css"/> --%>
 </head>
 <body>
     <div align="center">
@@ -20,18 +20,24 @@
         <%  if(request.getSession().getAttribute("user") == null) { %>
 
         <a href="/hospitalSystem/register" > 用户注册 </a>
-        <p></p>
+        <br>
         <a href="/hospitalSystem/login" > 用户登录 </a>
-        <p>powered by piong</p>
+
 
         <%} else{ %>
         欢迎您，${user.phone}
         <a href="/hospitalSystem/userInfo" > 查看我的信息 </a>
-        <p> </p>
+        <br>
         <a href="/hospitalSystem/logout" > 退出登录 </a>
-        <p>powered by piong</p>
 
         <% } %>
+
+        <a href="/hospitalSystem/departments" > 预约挂号</a>
+        <p></p>
+        <a href="/hospitalSystem/p/photos" > 点我看帅哥</a>
+
+        <p></p>
+        powered by piong
     </div>
 
 </body>

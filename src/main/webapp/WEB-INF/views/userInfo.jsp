@@ -17,7 +17,7 @@
     <p>手机号：${user.phone}</p>
     <p> 姓名：${user.name}</p>
     <p>性别：${user.sex}</p>
-    <p>身份证号码：${user.sex}</p>
+    <p>身份证号码：${user.uid}</p>
     <p><a href="/hospitalSystem/logout" >点此清除我的登录信息</a></p>
     <p><a href="/hospitalSystem/index" >点此返回主页</a></p>
 </div>

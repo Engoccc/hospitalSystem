@@ -12,7 +12,7 @@ public class LoginInterceptors implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         request.setCharacterEncoding("UTF-8");
         StringBuffer requestURL = request.getRequestURL();
-        if (requestURL.toString().contains("/userInfo") ) {
+        if (requestURL.toString().contains("/userInfo")||requestURL.toString().contains("/photos") ) {
 
             Object user = request.getSession().getAttribute("user");
 

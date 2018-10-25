@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -16,6 +17,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
+import web.example.service.DoctorService;
 import web.example.service.UserService;
 import web.example.users.User;
 
@@ -33,16 +35,28 @@ public class registerController {
         @Autowired
         UserService userService;
 
+        @Autowired
+        DoctorService doctorService;
+
+        @RequestMapping("/construction")
+        public String Construction() {
+        return "construction";
+    }
+
         @RequestMapping(value="/index",method = RequestMethod.GET)
         public String index() {
-        return "index";
-    }
+            return "index";
+        }
 
         @RequestMapping("/register")
         public String showRegister(){
             return "register";
         }
 
+    @RequestMapping("/p/photos")
+    public String showPhotos(){
+        return "photos";
+    }
 
     public String getRadom(int length){
         String val = "";
@@ -81,12 +95,20 @@ public class registerController {
 //        return "PhoneCheck";
 //    }
 
-
+    //判断是否位数字
+    public static boolean isNumeric(String str){
+        for (int i = str.length();--i>=0;){
+            if (!Character.isDigit(str.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
     @RequestMapping(value = "/register/rstatus",method = RequestMethod.GET)
-    public String getCheckNum(@RequestParam("userPhone") String userPhone){
+    public String getCheckNum(@RequestParam(value = "userPhone",required = false) String userPhone){
         String num = getRadom(6);
 
-        if(userPhone == "")
+        if( (!isNumeric(userPhone)) || userPhone.length() != 11 )
             return "error";
         phone = userPhone;
         checkNum = "11111";
@@ -144,6 +166,7 @@ public class registerController {
                 return "successAdd";
             }
             catch (Exception e){
+                System.out.println(e.toString());
                 return "error";
             }
         }
@@ -196,5 +219,22 @@ public class registerController {
         session.removeAttribute("user");
         System.out.println("clear session ok.");
         return "index";
+    }
+
+    @RequestMapping("/departments")
+    public String getDepartments(Model model){
+        model.addAttribute("departmentList",doctorService.getDepartments());
+        return "departments";
+    }
+
+    @RequestMapping(value = "/departments/{department_name}",method = RequestMethod.GET)
+    public String getOffices(@PathVariable("department_name") String department_name, Model model){
+        model.addAttribute("officeList",doctorService.getOffices(department_name));
+        return "offices";
+    }
+    @RequestMapping(value = "/offices/{office_name}",method = RequestMethod.GET)
+    public String getDoctors(@PathVariable("office_name") String office_name, Model model){
+        model.addAttribute("doctorList",doctorService.getDoctors(office_name));
+        return "doctors";
     }
 }
