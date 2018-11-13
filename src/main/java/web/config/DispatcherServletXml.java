@@ -60,7 +60,7 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/huser?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8");
         dataSource.setUsername("root");
-        dataSource.setPassword("123456");
+        dataSource.setPassword("199711244257Ping");
         return dataSource;
     }
 
@@ -101,9 +101,15 @@ public class DispatcherServletXml extends WebMvcConfigurerAdapter {
     public LoginInterceptors loginInterceptors() {
         return new LoginInterceptors();
     }
+//    @Bean
+//    public SqlInjectInterceptor sqlInjectInterceptor(){return new SqlInjectInterceptor();}
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(loginInterceptors());
+        //registry.addInterceptor(sqlInjectInterceptor());
     }
+
+
 }

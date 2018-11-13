@@ -20,13 +20,15 @@
             手机号：<input type="text" name="phone" value=${phone} readonly ><br>
             姓名(20字符内）：<input type="text" name="name"><br>
             性别：
-            <input type="radio" name="sex" value="male">Male
-            <input type="radio" name="sex" value="female">Female<br>
+            <input type="radio" name="sex" value="男">男
+            <input type="radio" name="sex" value="女">女<br>
             设置密码(20字符内)：<input type="text" name="password"><br>
             身份证号(18位)：<input type="text" name="uid"><br>
             医保卡号(9位)：<input type="text" name="card"><br>
             <input type="submit" value="提交">
         </form>
+        <br>
+        <a href="/hospitalSystem/index" >返回主页</a>
     </div>
 </body>
 </html>

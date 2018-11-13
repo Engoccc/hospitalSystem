@@ -21,24 +21,27 @@
 
         <a href="/hospitalSystem/register" > 用户注册 </a>
         <br>
+        <br>
         <a href="/hospitalSystem/login" > 用户登录 </a>
 
 
         <%} else{ %>
         欢迎您，${user.phone}
         <a href="/hospitalSystem/userInfo" > 查看我的信息 </a>
-        <br>
+        <br><br>
+        <a href="/hospitalSystem/myOrders" > 查看我的挂号单 </a>
+        <br><br>
         <a href="/hospitalSystem/logout" > 退出登录 </a>
 
         <% } %>
-
+        <br><br>
         <a href="/hospitalSystem/departments" > 预约挂号</a>
         <p></p>
-        <a href="/hospitalSystem/p/photos" > 点我看帅哥</a>
+        <%--<a href="/hospitalSystem/p/photos" > 点我看帅哥</a>--%>
 
         <p></p>
         powered by piong
     </div>
 
 </body>
-</html>0
+</html>

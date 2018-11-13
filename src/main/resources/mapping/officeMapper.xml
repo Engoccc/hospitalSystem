@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.example.dao.OfficeDao">
+
+    <resultMap type="web.example.users.Office" id="officeList">
+        <result property="office_id" column="office_id"/>
+        <result property="office_name" column="office_name"/>
+        <result property="department_id" column="department_id"/>
+        <result property="department_name" column="department_name"/>
+    </resultMap>
+    <select id="getOfficeByName" resultMap="officeList" parameterType="string">
+        SELECT *
+        FROM  office,department
+        WHERE office_name like '%${office_name}%'  and office.department_id = department.department_id;
+    </select>
+
+
+</mapper>

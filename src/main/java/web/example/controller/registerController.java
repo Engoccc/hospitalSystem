@@ -4,10 +4,17 @@ package web.example.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.httpclient.Header;
@@ -18,10 +25,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import web.example.service.DoctorService;
+import web.example.service.OfficeService;
+import web.example.service.OrderService;
 import web.example.service.UserService;
+import web.example.users.CustomGenericException;
+import web.example.users.Order;
 import web.example.users.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.validation.Errors;
@@ -37,6 +49,12 @@ public class registerController {
 
         @Autowired
         DoctorService doctorService;
+
+        @Autowired
+        OrderService orderService;
+
+        @Autowired
+        OfficeService officeService;
 
         @RequestMapping("/construction")
         public String Construction() {
@@ -67,33 +85,6 @@ public class registerController {
         return val;
     }
 
-//    @RequestMapping("/register/rstatus,method = RequestMethod.GET")
-//    public String checkPhone(){
-//
-//        HttpClient client = new HttpClient();
-//        PostMethod post = new PostMethod("http://gbk.api.smschinese.cn");
-//        post.addRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=gbk");//在头文件中设置转码
-//        NameValuePair[] data ={ new NameValuePair("Uid", "735093244qq"),new NameValuePair("Key", "d41d8cd98f00b204e980"),new NameValuePair("smsMob","17725296243"),new NameValuePair("smsText","验证码：8888")};
-//        post.setRequestBody(data);
-//
-//        try {
-//            client.executeMethod(post);
-//            Header[] headers = post.getResponseHeaders();
-//            int statusCode = post.getStatusCode();
-//            System.out.println("statusCode:" + statusCode);
-//            for (Header h : headers) {
-//                System.out.println(h.toString());
-//            }
-//            String result = new String(post.getResponseBodyAsString().getBytes("gbk"));
-//            System.out.println(result); //打印返回消息状态
-//        }
-//        catch (Exception e){}
-//
-//
-//        post.releaseConnection();
-//
-//        return "PhoneCheck";
-//    }
 
     //判断是否位数字
     public static boolean isNumeric(String str){
@@ -104,53 +95,39 @@ public class registerController {
         }
         return true;
     }
+    //发送验证码
     @RequestMapping(value = "/register/rstatus",method = RequestMethod.GET)
-    public String getCheckNum(@RequestParam(value = "userPhone",required = false) String userPhone){
+    public String getCheckNum(@RequestParam(value = "userPhone",required = false) String userPhone,HttpServletRequest request){
         String num = getRadom(6);
 
         if( (!isNumeric(userPhone)) || userPhone.length() != 11 )
-            return "error";
+            throw new CustomGenericException("手机号不合法....");
         phone = userPhone;
         checkNum = "11111";
-//
-//        HttpClient client = new HttpClient();
-//        PostMethod post = new PostMethod("http://gbk.api.smschinese.cn");
-//        post.addRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=gbk");//在头文件中设置转码
-//        NameValuePair[] data ={ new NameValuePair("Uid", "735093244qaq"),new NameValuePair("Key", "d41d8cd98f00b204e980"),new NameValuePair("smsMob",phone),new NameValuePair("smsText","验证码："+num)};
-//        post.setRequestBody(data);
-//
-//        try {
-//            client.executeMethod(post);
-//            Header[] headers = post.getResponseHeaders();
-//            int statusCode = post.getStatusCode();
-//            System.out.println("statusCode:" + statusCode);
-//            for (Header h : headers) {
-//                System.out.println(h.toString());
-//            }
-//            String result = new String(post.getResponseBodyAsString().getBytes("gbk"));
-//            System.out.println(result); //打印返回消息状态
-//        }
-//        catch (Exception e){}
-//
-//        post.releaseConnection();
 
-        System.out.println("手机号码 "+phone+" 您的验证码是: "+checkNum);
-
-        return "PhoneCheck";
+        if(!userService.exsistUser(userPhone)) {
+            System.out.println("手机号码 " + phone + " 您的验证码是: " + checkNum);
+            request.getSession().setAttribute("userPhone",userPhone);    //add
+            return "register";
+        }
+        else {
+            throw new CustomGenericException("该手机号已经注册，请直接登录");
+        }
     }
 
     @RequestMapping(value = "/register/rstatus",method = RequestMethod.POST)
-    public String checkNum(String num,Model model){
+    public String checkNum(String num,Model model,HttpServletRequest request){
 
      System.out.println("您输入的验证码是："+num);
      if(checkNum.equals(num)){
          System.out.println("验证通过！");
          model.addAttribute("phone",phone);
+         request.getSession().removeAttribute("userPhone");
          return "registerForm";
      }
      else{
          System.out.println("验证失败！");
-         return "rFailed";
+         throw new CustomGenericException("验证码错误，测试期间验证码为5个1");
      }
     }
 
@@ -159,7 +136,7 @@ public class registerController {
             System.out.println(phone+" pwd: "+user.getPassword()+" name: "+user.getName()+" sex: "+user.getSex()+" uid:"+user.getUid()+" card: "+user.getCard());
             if(errors.hasErrors()) {
                 System.out.println(errors.toString());
-                return "error";
+                throw new CustomGenericException("表单校验错误，请检查您输入的信息......");
             }
             try {
                 userService.insertIn(phone, user.getPassword(), user.getName(), user.getSex(), user.getUid(), user.getCard());
@@ -167,7 +144,7 @@ public class registerController {
             }
             catch (Exception e){
                 System.out.println(e.toString());
-                return "error";
+                throw new CustomGenericException("后台插入数据库出错，请联系管理员.....");
             }
         }
 //    @RequestMapping(value = "/register/rstatus/submitUser",method = RequestMethod.POST)
@@ -210,7 +187,7 @@ public class registerController {
             return "userInfo";
         }
         else
-            return "error";
+            throw new CustomGenericException("当前无用户登录.....");
     }
 
 
@@ -236,5 +213,57 @@ public class registerController {
     public String getDoctors(@PathVariable("office_name") String office_name, Model model){
         model.addAttribute("doctorList",doctorService.getDoctors(office_name));
         return "doctors";
+    }
+
+    @RequestMapping(value = "/mkOrder",method = RequestMethod.GET)
+    public String mkOrder(HttpServletRequest request,Model model){
+
+        Object user = request.getSession().getAttribute("user");
+        String user_phone = "";
+        String user_name = "";
+        for (Field f:user.getClass().getDeclaredFields()){   //遍历通过反射获取object的类中的属性名
+            f.setAccessible(true);    //设置改变属性为可访问
+            try {
+                if (f.getName().equals("phone")) {
+                    user_phone = f.get(user).toString();
+                    System.out.println("属性值" + f.get(user).toString());
+                }
+                if(f.getName().equals("name")){
+                    user_name = f.get(user).toString();
+                    System.out.println("属性值" + f.get(user).toString());
+                }
+            }
+            catch (Exception e){}
+        }
+
+        int order_price =Integer.valueOf(request.getSession().getAttribute("price").toString()).intValue();
+
+        orderService.insertIn(user_phone,request.getSession().getAttribute("did").toString(),new Date(),order_price);
+
+        model.addAttribute("orderList",orderService.getOrdersByUser(user_phone));
+        return "orders";
+    }
+
+    @RequestMapping("/myOrders")
+    public  String getMyOrders(HttpServletRequest request,Model model){
+            Object user = request.getSession().getAttribute("user");
+            String user_phone = "";
+
+            for (Field f:user.getClass().getDeclaredFields()){   //遍历通过反射获取object的类中的属性名
+                f.setAccessible(true);    //设置改变属性为可访问
+                try {
+                    if (f.getName().equals("phone"))
+                        user_phone = f.get(user).toString();
+                }
+                catch (Exception e){}
+            }
+            model.addAttribute("orderList",orderService.getOrdersByUser(user_phone));
+            return "orders";
+    }
+
+    @RequestMapping(value = "/queryOffice",method = RequestMethod.POST)
+    public String QueryOffice(Model model,String office_name){
+    model.addAttribute("officeList",officeService.getOfficeByName(office_name));
+    return "queryOfficeResult";
     }
 }

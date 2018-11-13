@@ -18,13 +18,18 @@
     <p>用户登录</p>
     <form name="input" action="/hospitalSystem/checkInfo" method="POST">
         手机号: <input type="text" name="phone">
+        <br>
         密码: <input type="text" name="password">
+        <br>
         <input type="submit" value="提交">
     </form>
+    <br>
+    <a href="/hospitalSystem/index" >返回主页</a>
 </div>
 <%} else{ %>
 <h1>您已经登录了！</h1>
-<p> <a href="/hospitalSystem/logout" >退出登录</a></p>
+<br>
+<a href="/hospitalSystem/index" >返回主页</a>
 <%} %>
 
 </body>

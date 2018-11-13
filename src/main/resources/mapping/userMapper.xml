@@ -22,14 +22,7 @@
     </select>
 
 
-
-    <resultMap type="web.example.users.Doctor" id="doctorList">
-        <result property="doctor_name" column="doctor_name"/>
-        <result property="office_name" column="office_name"/>
-        <result property="ranks" column="ranks"/>
-    </resultMap>
-    <select id="getDoctors" resultMap="doctorList" parameterType="string">
-        SELECT * FROM doctor WHERE office_name=#{office_name};  <!--此处的phone对应DAO中@Param("phone") String uphone，给方法的参数uphone命名为phone，然后这里根据phone获得值 -->
+    <select id="exsistUser" resultType="web.example.users.User" parameterType="string">
+        SELECT * FROM users WHERE phone=#{phone};  <!--此处的phone对应DAO中@Param("phone") String uphone，给方法的参数uphone命名为phone，然后这里根据phone获得值 -->
     </select>
-
 </mapper>

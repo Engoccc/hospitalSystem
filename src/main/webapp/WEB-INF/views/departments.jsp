@@ -17,7 +17,13 @@
     <a href="/hospitalSystem/departments/${department_name}" >
             <c:out value="${department_name}" />
     </a>
-        <p></p>
+        <br>
     </c:forEach>
+    <p>
+    <form name="input" action="/hospitalSystem/queryOffice" method="POST">
+        查询诊室: <input type="text" name="office_name">
+        <input type="submit" value="查询">
+    </form>
+    </p>
 </body>
 </html>

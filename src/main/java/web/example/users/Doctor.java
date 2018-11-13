@@ -2,6 +2,7 @@ package web.example.users;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Doctor {
@@ -30,16 +31,19 @@ public class Doctor {
     @NotEmpty
     private String office;
 
+    @NotNull
+    private int doctor_price;
 
     public Doctor(){}
 
-    public Doctor(String phone,String name,String sex,String did,String ranks,String office){
+    public Doctor(String phone,String name,String sex,String did,String ranks,String office,int doctor_price){
         this.phone=phone;
         this.name=name;
         this.sex=sex;
         this.did=did;
         this.ranks=ranks;
         this.office = office;
+        this.doctor_price = doctor_price;
     }
 
     public String getPhone() {
@@ -75,4 +79,6 @@ public class Doctor {
     }
     public void setRanks(String ranks){this.ranks = ranks;}
 
+    public int getDoctor_price(){return doctor_price;}
+    public void setDoctor_price(int doctor_price){this.doctor_price = doctor_price;}
 }

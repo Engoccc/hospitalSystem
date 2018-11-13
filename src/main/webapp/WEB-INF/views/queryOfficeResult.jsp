@@ -2,23 +2,24 @@
 <%--
   Created by IntelliJ IDEA.
   User: Piong
-  Date: 2018/10/14
-  Time: 23:07
+  Date: 2018/11/2
+  Time: 15:39
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <html>
 <head>
-    <title>错误页</title>
+    <title>查询结果</title>
 </head>
 <body>
-<div align="center">
-    <p>o(╥﹏╥)o</p>
-    <p>非常抱歉，出现了错误</p>
+<c:forEach items="${officeList}" var = "office">
+    科室：<c:out value="${office.department_name}" />
+    诊室：
+    <a href="/hospitalSystem/offices/${office.office_name}" >
+        <c:out value="${office.office_name}" />
+    </a>
     <br>
-    <p>错误原因：<c:out value="${errMsg}" /></p>
-    <a href="/hospitalSystem/index" > 返回主页 </a>
-</div>
+</c:forEach>
 </body>
 </html>

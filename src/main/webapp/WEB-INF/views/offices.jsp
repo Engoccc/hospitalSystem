@@ -17,7 +17,7 @@
     <a href="/hospitalSystem/offices/${office_name}" >
         <c:out value="${office_name}" />
     </a>
-    <p></p>
+    <br>
 </c:forEach>
 </body>
 </html>

@@ -13,13 +13,13 @@ public class DoctorService {
     DoctorDao doctorDao;
     public List<Doctor> getDoctors(String office_name){
      List<Doctor> dl = doctorDao.getDoctors(office_name);
-     if(dl == null) {
+     if(dl.isEmpty()) {
          System.out.println("Get Doctors Failed or no doctors");
          return null;
      }
      else {
          for(Doctor i : dl)
-             System.out.println(i.getName()+i.getPhone()+i.getOffice()+i.getRanks());
+             System.out.println(i.getDid()+i.getName()+i.getPhone()+i.getOffice()+i.getRanks()+i.getDoctor_price());
          return dl;
      }
      }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="web.example.dao.OrderDao">
+
+
+    <insert id="addOrder" parameterType="web.example.users.Order">
+       insert into user_order(user_order_id,user_phone,doctor_id,user_order_time,user_order_price,pay_state) values(0,#{user_phone},#{doctor_id},#{user_order_time},#{user_order_price},'0');
+    </insert>
+
+
+    <resultMap type="web.example.users.Order" id="orderList">
+        <result property="user_order_id" column="user_order_id"/>
+        <result property="user_name" column="name"/>
+        <result property="user_phone" column="user_phone"/>
+        <result property="doctor_id" column="doctor_id"/>
+        <result property="doctor_name" column="doctor_name"/>
+        <result property="office_name" column="office_name"/>
+        <result property="user_order_time" column="user_order_time"/>
+        <result property="user_order_price" column="user_order_price"/>
+        <result property="pay_state" column="pay_state"/>
+    </resultMap>
+    <select id="getOrdersByUser" resultMap="orderList" parameterType="string">
+        SELECT *
+        FROM  users,user_order,doctor
+        WHERE users.phone=#{user_phone} and user_order.user_phone = users.phone and doctor.doctor_id = user_order.doctor_id;
+    </select>
+
+
+</mapper>

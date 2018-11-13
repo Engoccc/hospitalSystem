@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
-例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
- -->
+
 <mapper namespace="web.example.dao.DoctorDao">
-    <!-- 在select标签中编写查询的SQL语句， 设置select标签的id属性为getUser，id属性值必须是唯一的，不能够重复
-    使用parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型
-    resultType="me.gacl.domain.User"就表示将查询结果封装成一个User类的对象返回
-    User类就是users表所对应的实体类
-    -->
-    <!--
-        根据id查询得到一个user对象
-     -->
 
     <resultMap type="web.example.users.Doctor" id="doctorList">
+        <result property="did" column="doctor_id"/>
         <result property="name" column="doctor_name"/>
         <result property="office" column="office_name"/>
         <result property="phone" column="phone"/>
         <result property="ranks" column="ranks"/>
+        <result property="doctor_price" column="doctor_price"/>
     </resultMap>
     <select id="getDoctors" resultMap="doctorList" parameterType="string">
-        SELECT * FROM doctor WHERE office_name=#{office_name};  <!--此处的phone对应DAO中@Param("phone") String uphone，给方法的参数uphone命名为phone，然后这里根据phone获得值 -->
+        SELECT * FROM doctor WHERE office_name=#{office_name};
     </select>
 
     <resultMap type="String" id="departmentList">
@@ -36,4 +28,5 @@
     <select id="getOffices" resultMap="officeList" parameterType="string">
         SELECT office_name FROM office,department where office.department_id = department.department_id and department.department_name = #{department_name};
     </select>
+
 </mapper>

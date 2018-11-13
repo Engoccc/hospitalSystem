@@ -33,4 +33,10 @@ public class UserService {
     public void insertIn(String phone,String password,String name,String sex,String uid,String card){
         userDao.addUser(phone,password,name,sex,uid,card);
     }
+    public boolean exsistUser(String user_phone){
+        if(userDao.exsistUser(user_phone) != null)
+            return true;
+        else
+            return false;
+    }
 }
